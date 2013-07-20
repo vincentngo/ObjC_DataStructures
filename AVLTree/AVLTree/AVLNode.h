@@ -22,4 +22,6 @@
 //Calculates height of an AVL node
 -(NSInteger) getHeightWithNode: (AVLNode *)node;
 
+-(NSComparisonResult) compareElementWith: (id) element;
+
 @end

@@ -11,6 +11,23 @@
 
 @interface AVLTree : NSObject
 
+@property (nonatomic, strong)AVLNode *root;
+
+- (id)findElementWithElement : (id)element;
+- (BOOL) insertElement;
+- (BOOL) removeElement;
+
+- (AVLNode *) findMinWithAVLTree: (AVLNode *)node;
+- (AVLNode *) findMaxWithAVLTree: (AVLNode *)node;
+
+
+- (BOOL) isEmpty;
+- (BOOL) isEqual:(id)object;
+
+
+
+//We can use NSCompareResult
+
 //init
 
 //insert
@@ -18,6 +35,17 @@
 //removeByKey
 
 
+//balance
+//rotateRightChildonce
+//rotateLeftChildOnce
+
+//find method
+//find max method
+//find min
+
+
+//inOrderTraversals
+//Preordertraversal
 
 
 
