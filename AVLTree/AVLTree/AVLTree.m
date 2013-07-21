@@ -114,13 +114,26 @@
 - (BOOL) removeElementWithElement : (id)element
 {
     //TODO: removeElementWithElement
-    return [self removeElementWithElement: element withAVLTree: self.root];
+    [self removeElementWithElement: element withAVLTree: self.root];
+    return NO;
 }
 
-- (BOOL) removeElementWithElement:(id)element withAVLTree: (AVLNode *)node
+- (AVLNode *) removeElementWithElement:(id)element withAVLTree: (AVLNode *)node
 {
-    //TODO: helper method removeElementWithElement
-    return YES;
+
+    //first check if the node is nil
+    
+    //next we need to find where the element is, comparing left and right nodes
+    
+    //once we find it, we look for it's minimum
+    
+    //remove minimum, handle cases
+    
+    //replace minimum with remove node.
+    
+    // need to balance the tree
+    
+    return [self balanceAVLTree: node];
 }
 
 
@@ -130,8 +143,36 @@
 
 - (AVLNode *) balanceAVLTree: (AVLNode *)tree
 {
-    //TODO: balanceAVLTree
-    return nil;
+    if (tree == nil) return tree;
+    
+    if ((tree.left.height - tree.right.height) > 1)
+    {
+        if (tree.left.left.height >= tree.left.right.height)
+        {
+            tree = [self rotateWithLeftChild: tree];
+        }
+        else
+        {
+            tree = [self doubleRotateWithLeftChild: tree];
+        }
+    }
+    else if ((tree.right.height - tree.left.height) > 1)
+    {
+        if (tree.right.right.height >= tree.right.left.height)
+        {
+            tree = [self rotateWithRightChild: tree];
+        }
+        else
+        {
+            tree = [self doubleRotateWithRightChild: tree];
+        }
+    }
+    else
+    {
+        tree.height = MAX(tree.left.height, tree.right.height) + 1;
+    }
+    
+    return tree;
 }
 
 - (AVLNode *) rotateWithLeftChild: (AVLNode *)tree
@@ -159,7 +200,7 @@
     return newParentNode;
 }
 
-//LEFT RIGHT
+//RIGHT LEFT
 - (AVLNode *) doubleRotateWithLeftChild: (AVLNode *)tree
 {
     tree.left = [self rotateWithRightChild: tree];
@@ -167,7 +208,7 @@
     return [self rotateWithLeftChild: tree];
 }
 
-//RIGHT LEFT
+//LEFT RIGHT
 - (AVLNode *) doubleRotateWithRightChild: (AVLNode *)tree
 {
     tree.right = [self rotateWithLeftChild: tree.right];
