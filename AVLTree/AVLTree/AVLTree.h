@@ -9,43 +9,25 @@
 #import <Foundation/Foundation.h>
 #import "AVLNode.h"
 
+#define testTree 1
+
 @interface AVLTree : NSObject
 
-@property (nonatomic, strong)AVLNode *root;
+#if testTree
+    @property (nonatomic, strong)AVLNode *root;
+#endif
 
 - (id)findElementWithElement : (id)element;
-- (BOOL) insertElement;
-- (BOOL) removeElement;
+- (BOOL) insertElementWithElement : (id)element;
+- (BOOL) removeElementWithElement : (id)element;
 
-- (AVLNode *) findMinWithAVLTree: (AVLNode *)node;
-- (AVLNode *) findMaxWithAVLTree: (AVLNode *)node;
-
+- (id) findMin;
+- (id) findMax;
 
 - (BOOL) isEmpty;
 - (BOOL) isEqual:(id)object;
 
 
-
-//We can use NSCompareResult
-
-//init
-
-//insert
-
-//removeByKey
-
-
-//balance
-//rotateRightChildonce
-//rotateLeftChildOnce
-
-//find method
-//find max method
-//find min
-
-
-//inOrderTraversals
-//Preordertraversal
 
 
 

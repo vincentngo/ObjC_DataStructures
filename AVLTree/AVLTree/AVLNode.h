@@ -22,6 +22,11 @@
 //Calculates height of an AVL node
 -(NSInteger) getHeightWithNode: (AVLNode *)node;
 
+//Compares two elements.
+//NSOrderedAscending - > left < right
+//NSOrderedDescending - > left > right
+//NSOrderedSame -> left = right
+//TODO: may need to fix this if you want to support other objects, currently only compares integers. 
 -(NSComparisonResult) compareElementWith: (id) element;
 
 @end

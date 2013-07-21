@@ -8,9 +8,13 @@
 
 #import "AVLTree.h"
 
+#define IMBALANCE_THRESHOLD = 1;
+
 @interface AVLTree()
 
-//@property (nonatomic, strong)AVLNode *root;
+#if !testTree
+    @property (nonatomic, strong)AVLNode *root;
+#endif
 
 @end
 
@@ -27,13 +31,7 @@
     return self;
 }
 
-- (BOOL) isEmpty
-{
-    return (self.root == nil);
-}
-
 #pragma mark - finding element in AVLTree
-
 
 /**
  *  Will return a reference to the specified data element in the AVLTree, or nil if the element is not present. 
@@ -52,7 +50,7 @@
  *  \param node, the subtree to search
  *  \return the node that has the specified element or nil if not found.
  */
-- (AVLNode *)findElementWithElement : (id)element withAVLTree: (AVLNode *) node
+- (AVLNode *)findElementWithElement : (id)element withAVLTree: (AVLNode *)node
 {
     if (node == nil) return nil;
     
@@ -74,7 +72,149 @@
     }
 }
 
+#pragma mark - inserting and deleting in AVLTree
 
+- (BOOL) insertElementWithElement : (id)element
+{
+    if (element == nil) return NO;
+    
+    @try {
+        self.root = [self insertElementWithElement:element withAVLTree:self.root];
+    }
+    @catch (NSException *exception) {
+        return NO;
+    }
+}
+
+- (AVLNode *) insertElementWithElement : (id)element withAVLTree: (AVLNode *)node
+{
+    if (node == nil)
+    {
+        return [[AVLNode alloc]initWithElement:element];
+    }
+    
+    NSComparisonResult compareResult = [node compareElementWith: element];
+    
+    if (compareResult == NSOrderedAscending)
+    {
+        node.left = [self insertElementWithElement:element withAVLTree: node.left];
+    }
+    else if (compareResult == NSOrderedDescending)
+    {
+        node.right = [self insertElementWithElement:element withAVLTree: node.right];
+    }
+    else
+    {
+        [NSException raise:@"Element: " format:@"%@, is already in subTree", element];
+    }
+    
+    return [self balanceAVLTree: node];
+}
+
+- (BOOL) removeElementWithElement : (id)element
+{
+    //TODO: removeElementWithElement
+    return [self removeElementWithElement: element withAVLTree: self.root];
+}
+
+- (BOOL) removeElementWithElement:(id)element withAVLTree: (AVLNode *)node
+{
+    //TODO: helper method removeElementWithElement
+    return YES;
+}
+
+
+#pragma mark - AVL rotations
+
+//TODO: do test cases for rotations
+
+- (AVLNode *) balanceAVLTree: (AVLNode *)tree
+{
+    //TODO: balanceAVLTree
+    return nil;
+}
+
+- (AVLNode *) rotateWithLeftChild: (AVLNode *)tree
+{
+    AVLNode *newParentNode = tree.left;
+    tree.left = newParentNode.right;
+    newParentNode.right = tree;
+    
+    tree.height = MAX(tree.left.height, tree.right.height) + 1;
+    newParentNode.height = MAX(newParentNode.left.height, tree.height) + 1;
+    
+    return newParentNode;
+}
+
+
+- (AVLNode *) rotateWithRightChild: (AVLNode *)tree
+{
+    AVLNode *newParentNode = tree.right;
+    tree.right = newParentNode.left;
+    newParentNode.left = tree;
+    
+    tree.height = MAX(tree.left.height, tree.right.height) + 1;
+    newParentNode.height = MAX(newParentNode.right.height, tree.height) + 1;
+    
+    return newParentNode;
+}
+
+//LEFT RIGHT
+- (AVLNode *) doubleRotateWithLeftChild: (AVLNode *)tree
+{
+    tree.left = [self rotateWithRightChild: tree];
+    
+    return [self rotateWithLeftChild: tree];
+}
+
+//RIGHT LEFT
+- (AVLNode *) doubleRotateWithRightChild: (AVLNode *)tree
+{
+    tree.right = [self rotateWithLeftChild: tree.right];
+    
+    return [self rotateWithRightChild: tree];
+}
+
+#pragma mark - Utility
+
+- (id) findMin
+{
+    AVLNode *node = [self findMinWithAVLTree: self.root];
+    
+    return (node == nil) ? nil : node.element;
+}
+
+- (id) findMax
+{
+    AVLNode *node = [self findMaxWithAVLTree: self.root];
+    
+    return (node == nil) ? nil : node.element;
+}
+
+- (AVLNode *) findMinWithAVLTree: (AVLNode *)node
+{
+    if (node == nil) return nil;
+    
+    return (node.left != nil) ? [self findMinWithAVLTree: node.left] : node;
+}
+
+- (AVLNode *) findMaxWithAVLTree: (AVLNode *)node
+{
+    if (node == nil) return nil;
+    
+    return (node.right != nil) ? [self findMaxWithAVLTree: node.right] : node;
+}
+
+- (BOOL) isEqual:(id)object
+{
+    //TODO: isEqual;
+    return NO;
+}
+
+- (BOOL) isEmpty
+{
+    return (self.root == nil);
+}
 
 //UIKitFrameworks has built support to compare
 //NSDate, NSString, NSData, NSNumber, and few others,
